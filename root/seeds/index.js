@@ -1,10 +1,12 @@
+require('dotenv').config()
+
 const mongoose = require('mongoose')
 const Article = require('../models/article')
 const Topic = require('../models/topic')
 const seed_articles = require('./seed_articles')
 const seed_topics = require('./seed_topics')
 
-mongoose.connect('mongodb://localhost:27017/article-database')
+mongoose.connect(process.env.DB_URI)
 
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'connection error'))
@@ -13,7 +15,6 @@ db.once('open', () => {
 })
 
 const seedDB = async () => {
-  //Old Seeding method by Kieran
   await Topic.deleteMany({})
   for (let i = 0; i < seed_topics.length; i++) {
     const t = new Topic({
